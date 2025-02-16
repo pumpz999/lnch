@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  walletAddress String @unique
+  tokens    Token[]
+  createdAt DateTime @default(now())
+}
+
+model Token {
+  id            String   @id @default(cuid())
+  name          String
+  symbol        String
+  totalSupply   BigInt
+  decimals      Int
+  creator       User     @relation(fields: [creatorId], references: [id])
+  creatorId     String
+  createdAt     DateTime @default(now())
+  liquidityPool LiquidityPool?
+}
+
+model LiquidityPool {
+  id        String   @id @default(cuid())
+  token     Token    @relation(fields: [tokenId], references: [id])
+  tokenId   String   @unique
+  poolType  String   // Uniswap/Raydium
+  liquidity Float
+  createdAt DateTime @default(now())
+}

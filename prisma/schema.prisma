@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String    @id @default(cuid())
+  walletAddress    String    @unique
+  verificationData Json?
+  tokenCreations   Token[]
+  createdAt        DateTime  @default(now())
+  lastVerifiedAt   DateTime?
+  verificationScore Float    @default(0)
+}
+
+model Token {
+  id              String   @id @default(cuid())
+  name            String
+  symbol          String
+  totalSupply     BigInt
+  creator         User     @relation(fields: [creatorId], references: [id])
+  creatorId       String
+  fraudScore      Float    @default(0)
+  isVerified      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+model FraudDetectionLog {
+  id              String   @id @default(cuid())
+  walletAddress   String
+  tokenName       String
+  logoUrl         String?
+  similarityScore Float
+  spamScore       Float
+  isSuspicious    Boolean
+  createdAt       DateTime @default(now())
+}

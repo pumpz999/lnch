@@ -1,0 +1,19 @@
+{
+  "name": "token-launchpad",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow-pnpm",
+    "prepare": "prisma generate",
+    "validate": "node scripts/deployment-check.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0 || ^20.0.0 || ^22.0.0",
+    "only-allow-pnpm": "^1.0.0",
+    "prisma": "^5.0.0",
+    "typescript": "^5.0.0"
+  }
+}
